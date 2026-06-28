@@ -1,11 +1,15 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-const getAi = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY)
+import dotenv from "dotenv"
+
+dotenv.config();
+
+const getAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
 export async function generateMCQs(pdfText) {
     const model = getAi.getGenerativeModel({model : 'gemini-2.5-flash'})
 
 //prompt start-------------------------------------------------------------
-    const prompt = `You are an MCQ generator. Based on the following text, generate 10 multiple choice questions.
+    const prompt = `You are an MCQ generator. Based on the following text, generate Maximum multiple choice questions.
 
 Return ONLY a JSON array, no extra text, no markdown, no backticks, just raw JSON like this:
 [
