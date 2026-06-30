@@ -1,17 +1,13 @@
 import { useState } from "react";
 
-function Login({ isOpen, onClose, onLoginSuccess }) {
+function Register({ onClose, onLoginSuccess }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username.trim() && password.trim()) {
-      // Simulate successful auth
       onLoginSuccess();
-      onClose();
     } else {
       alert("Please enter both username and password");
     }
@@ -35,9 +31,7 @@ function Login({ isOpen, onClose, onLoginSuccess }) {
         </button>
 
         <div className="text-center mb-6">
-          <span className="text-4xl">🔐</span>
-          <h2 className="text-2xl font-extrabold text-slate-800 mt-2">Welcome Back</h2>
-          <p className="text-slate-500 text-sm mt-1">Sign in to access your dashboard</p>
+          <h2 className="text-2xl font-extrabold text-slate-800 mt-2">Sign in to access your dashboard</h2>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -77,4 +71,4 @@ function Login({ isOpen, onClose, onLoginSuccess }) {
   );
 }
 
-export default Login;
+export default Register;
