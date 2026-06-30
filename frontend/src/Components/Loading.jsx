@@ -8,7 +8,9 @@ function Loading() {
       
       <div className="text-center">
         <h2 className="text-xl font-bold text-slate-800 mb-2">Analyzing PDF</h2>
-        <p className="text-slate-500 text-sm animate-pulse">Using AI to craft the perfect questions...</p>
+        <p className="text-slate-500 text-sm animate-pulse">Please wait this can take some time.</p>
+        
+        
       </div>
     </div>
   );

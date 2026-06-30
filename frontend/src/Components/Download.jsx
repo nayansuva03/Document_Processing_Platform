@@ -45,6 +45,7 @@ function Download({ mcqs, onReset }) {
 
       <div>
         <h1 className="text-2xl font-extrabold text-slate-800 mb-2">Ready to Download!</h1>
+        <h2 className="text-xl font-extrabold text-slate-800 mb-2">Thank you for your patience❤️</h2>
         <p className="text-slate-500 text-sm">
           Your PDF containing <span className="font-bold text-slate-700">{mcqs?.length || 0} questions</span> has been generated successfully.
         </p>
