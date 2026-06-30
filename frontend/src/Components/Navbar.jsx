@@ -20,7 +20,6 @@ function Navbar({ isLoggedIn, currentView, setCurrentView, onLogin, onLogout }) 
             </span>
           </div>
 
-          // all nevigation buttons.
           <div className="flex space-x-8 h-full items-center">
             <button onClick={() => setCurrentView("home")} className={linkClass("home")}>
               Home
