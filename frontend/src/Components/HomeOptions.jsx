@@ -1,0 +1,76 @@
+import React from "react";
+
+function HomeOptions({ onSelectOption }) {
+  return (
+    <div className="w-full max-w-5xl px-4 py-8 mx-auto">
+      <div className="text-center mb-12">
+        <h1 className="text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">
+          Choose Your Mode ✨
+        </h1>
+        <p className="text-slate-500 text-sm max-w-md mx-auto">
+          Select how you want to transform your learning materials today.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center pt-4">
+        
+        {/* Card 1: Online Quiz */}
+        <div 
+          onClick={() => onSelectOption("quiz")}
+          className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 hover:border-indigo-200 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-72 justify-between group"
+        >
+          <div>
+            <div className="text-4xl mb-4 p-3 bg-indigo-50 rounded-2xl w-fit group-hover:scale-110 transition-transform">⚡</div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Online Quiz</h3>
+            <p className="text-slate-500 text-sm leading-relaxed">
+              Test your knowledge instantly with rapid-fire customizable quiz sessions.
+            </p>
+          </div>
+          <span className="text-indigo-600 font-bold text-sm inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+            Start Quiz →
+          </span>
+        </div>
+
+        {/* Card 2: Generate Maximum Questions (Elevated & Larger) */}
+        <div 
+          onClick={() => onSelectOption("max_questions")}
+          className="bg-white p-8 rounded-3xl shadow-2xl border-2 border-indigo-500 md:-translate-y-4 md:scale-105 transition-all duration-300 cursor-pointer flex flex-col h-80 justify-between relative overflow-hidden group"
+        >
+          <div className="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-extrabold px-4 py-1.5 rounded-bl-2xl uppercase tracking-wider">
+            Most Popular
+          </div>
+          <div className="mt-2">
+            <div className="text-4xl mb-4 p-3 bg-indigo-600 text-white rounded-2xl w-fit group-hover:rotate-6 transition-transform">🚀</div>
+            <h3 className="text-2xl font-extrabold text-slate-800 mb-2">Generate Max Questions</h3>
+            <p className="text-slate-600 text-sm leading-relaxed">
+              Extract every bit of knowledge. Generate comprehensive lists of varying question formats.
+            </p>
+          </div>
+          <span className="text-indigo-600 font-bold text-sm inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+            Explore Formats →
+          </span>
+        </div>
+
+        {/* Card 3: Make Exam Papers */}
+        <div 
+          onClick={() => onSelectOption("exam_papers")}
+          className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 hover:border-indigo-200 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-72 justify-between group"
+        >
+          <div>
+            <div className="text-4xl mb-4 p-3 bg-slate-50 rounded-2xl w-fit group-hover:scale-110 transition-transform">📝</div>
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Make Exam Papers</h3>
+            <p className="text-slate-500 text-sm leading-relaxed">
+              Structure systematic printable standard evaluation blueprints.
+            </p>
+          </div>
+          <span className="text-slate-400 font-bold text-sm inline-flex items-center gap-1">
+            Coming Soon...
+          </span>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+export default HomeOptions;

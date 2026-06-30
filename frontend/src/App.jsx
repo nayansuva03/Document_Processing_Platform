@@ -6,6 +6,9 @@ import Loading from "./Components/Loading";
 import Download from "./Components/Download";
 import About from "./Components/Aboutpage";
 import PreviousPDFs from "./Components/PreviousPDFs";
+import HomeOptions from "./Components/HomeOptions";
+import MaxQuestOption from "./Components/MaxQuestOption";
+import OnlineQuizOptions from "./Components/OnlineQuizOptions";
 import { extracteFromPdf } from "./utils/extractText";
 import { generateMCQs } from "./utils/generateMCQs";
 

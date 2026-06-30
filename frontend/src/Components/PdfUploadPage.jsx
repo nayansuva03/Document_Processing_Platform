@@ -59,7 +59,7 @@ function PdfUploadPage({ FinalFiles }) {
             : "bg-slate-300 cursor-not-allowed"
           }`}
       >
-        Generate Questions ✨
+        Select Your Method
       </button>
     </div>
   );
