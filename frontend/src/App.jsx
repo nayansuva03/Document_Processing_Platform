@@ -56,6 +56,11 @@ function App() {
     <Route path="/" element={<PdfUploadPage FinalFiles={handelFinalFiles} />} />
     <Route path="/PreviousPDFs" element={<PreviousPDFs isLoggedIn={isLoggedIn} />} />
     <Route path="/About" element={<About />} />
+    <Route path="/Homeoptions" element={<HomeOptions />} />
+    <Route path="/HomeOptions/maxquest" element={<MaxQuestOption />}/>
+    <Route path="/HomeOptions/onlinequez" element={<OnlineQuizOptions />}/>
+    <Route path="/HomeOptions/exampaper" element={<ExamPaperOptions />}/>
+
   </Routes>
 
   {showRegister && (

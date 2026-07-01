@@ -12,10 +12,10 @@ function ExamPaperOptions({ onSubmitPaper, onBack }) {
     totalMarks: "",
     difficulty: "Medium",
     questionTypes: {
-      mcq: { checked: false, extra: false },
-      trueFalse: { checked: false, extra: false },
-      oneLiner: { checked: false, extra: false },
-      longQuestion: { checked: false, extra: false },
+      mcq: { checked: false, extra: 0 },        // Changed extra to numeric state
+      trueFalse: { checked: false, extra: 0 },  // Changed extra to numeric state
+      oneLiner: { checked: false, extra: 0 },   // Changed extra to numeric state
+      longQuestion: { checked: false, extra: 0 },// Changed extra to numeric state
     },
   });
 
@@ -41,13 +41,47 @@ function ExamPaperOptions({ onSubmitPaper, onBack }) {
 
   // Handle nested matrix checkbox evaluations
   function handleCheckboxChange(type, field) {
+    setFormData((prev) => {
+      const nextCheckedValue = !prev.questionTypes[type][field];
+      return {
+        ...prev,
+        questionTypes: {
+          ...prev.questionTypes,
+          [type]: {
+            ...prev.questionTypes[type],
+            [field]: nextCheckedValue,
+            // Automatically clear extra count back to 0 if unchecked
+            extra: nextCheckedValue ? prev.questionTypes[type].extra : 0,
+          },
+        },
+      };
+    });
+  }
+
+  // NEW: Handles changes for the extra questions counter with a strict max cap of 5
+  function handleExtraCountChange(type, value) {
+    if (value === "") {
+      setFormData((prev) => ({
+        ...prev,
+        questionTypes: {
+          ...prev.questionTypes,
+          [type]: { ...prev.questionTypes[type], extra: "" },
+        },
+      }));
+      return;
+    }
+
+    let numValue = parseInt(value, 10);
+    if (numValue > 5) numValue = 5; // Cap maximum at 5
+    if (numValue < 0) numValue = 0; // Prevent negative inputs
+
     setFormData((prev) => ({
       ...prev,
       questionTypes: {
         ...prev.questionTypes,
         [type]: {
           ...prev.questionTypes[type],
-          [field]: !prev.questionTypes[type][field],
+          extra: numValue,
         },
       },
     }));
@@ -56,7 +90,6 @@ function ExamPaperOptions({ onSubmitPaper, onBack }) {
   function handleSubmit(e) {
     e.preventDefault();
     
-    // Basic structural validation check
     if (!formData.instituteName || !formData.subject || !formData.totalMarks) {
       alert("Please fill in the core parameters (Institute Name, Subject, and Total Marks).");
       return;
@@ -189,7 +222,6 @@ function ExamPaperOptions({ onSubmitPaper, onBack }) {
           <label className="block text-slate-700 font-bold text-sm mb-3">Questions Structural Configuration Matrix</label>
           <div className="bg-slate-50 rounded-2xl border border-slate-200 divide-y divide-slate-200 overflow-hidden">
             
-            {/* Row Definition Mapper Helper Block */}
             {[
               { id: "mcq", label: "MCQs" },
               { id: "trueFalse", label: "True / False" },
@@ -208,23 +240,25 @@ function ExamPaperOptions({ onSubmitPaper, onBack }) {
                   {item.label}
                 </label>
 
-                {/* Sub-Checkbox Secondary Metric Configuration Toggle */}
-                <label 
-                  className={`flex items-center gap-2 cursor-pointer select-none text-xs font-medium transition-all ${
-                    formData.questionTypes[item.id].checked 
-                      ? "text-slate-600" 
-                      : "text-slate-300 opacity-50 pointer-events-none"
-                  }`}
-                >
+                {/* MODIFIED: Replaced Sub-Checkbox with Number Input field (max 5) */}
+                <div className="flex items-center gap-2">
+                  <span 
+                    className={`text-xs font-medium transition-colors duration-150 ${
+                      formData.questionTypes[item.id].checked ? "text-slate-600" : "text-slate-300"
+                    }`}
+                  >
+                    Extra / Optional count:
+                  </span>
                   <input
-                    type="checkbox"
+                    type="number"
+                    min="0"
+                    max="5"
                     disabled={!formData.questionTypes[item.id].checked}
-                    checked={formData.questionTypes[item.id].extra}
-                    onChange={() => handleCheckboxChange(item.id, "extra")}
-                    className="w-3.5 h-3.5 rounded text-indigo-600 border-slate-300 focus:ring-indigo-500 disabled:bg-slate-200 transition-colors"
+                    value={formData.questionTypes[item.id].extra}
+                    onChange={(e) => handleExtraCountChange(item.id, e.target.value)}
+                    className="w-14 px-2 py-1 text-center text-xs font-bold rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white disabled:bg-slate-100 disabled:text-slate-300 transition-all shadow-sm"
                   />
-                  Extra / Optional
-                </label>
+                </div>
               </div>
             ))}
 

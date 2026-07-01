@@ -1,15 +1,16 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 function PdfUploadPage({ FinalFiles }) {
   const [file, setfile] = useState([]);
 
-  function handelFileChange (e) {
+  function handelFileChange(e) {
     const selectedFiles = Array.from(e.target.files);
     setfile(selectedFiles);
   }
 
-  function handelFileSelect (){
-    if(file.length === 0){
+  function handelFileSelect() {
+    if (file.length === 0) {
       alert("please select a PDF");
       return;
     }
@@ -35,7 +36,7 @@ function PdfUploadPage({ FinalFiles }) {
       <div className="border-2 border-dashed border-slate-300 rounded-2xl p-8 flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 hover:border-indigo-400 transition-colors duration-200 group">
         <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-200">📄</div>
         <p className="text-slate-700 font-medium mb-1">Select a PDF file</p>
-        
+
         <input
           onChange={handelFileChange}
           type="file"
@@ -50,17 +51,20 @@ function PdfUploadPage({ FinalFiles }) {
         />
       </div>
 
-      <button
+      <NavLink
+
+        to="Homeoptions"
         onClick={handelFileSelect}
         disabled={file.length === 0}
         className={`w-full py-3.5 px-4 rounded-xl font-bold text-white transition-all duration-200 
-          ${file.length > 0 
-            ? "bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0" 
+          ${file.length > 0
+            ? "bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0"
             : "bg-slate-300 cursor-not-allowed"
           }`}
       >
         Select Your Method
-      </button>
+      </NavLink>
+
     </div>
   );
 }
