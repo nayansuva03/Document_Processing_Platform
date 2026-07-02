@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-    extracteText:"",
+    extractedText:"",
 }
 
 const pdfSlice = createSlice({
@@ -9,7 +9,7 @@ const pdfSlice = createSlice({
     initialState,
     reducers:{
         setExtractedText:(state, action) => {
-            state.extracteText = action.payload;
+            state.extractedText = action.payload;
         }
     },
 })
