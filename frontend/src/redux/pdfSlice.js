@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-    extracteText="",
+    extracteText:"",
 }
 
 const pdfSlice = createSlice({
