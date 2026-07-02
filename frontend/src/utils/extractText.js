@@ -1,5 +1,6 @@
 import * as pdfjsLib from 'pdfjs-dist'
 import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url'
+import { useSelector } from 'react-redux';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl
 
