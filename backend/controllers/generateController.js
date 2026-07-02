@@ -1,17 +1,15 @@
-import { generateMCQs } from "../services/Gemini.js";
+import { generateResult } from "../services/Gemini.js";
 
 export async function generate(req, res) {
-    try {
-        const {pdfText} = req.body
-        const mcqs = await generateMCQs(pdfText);
-        res.json(mcqs)
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            error: error.message,
-            error:"Failed to generate MCQs"
-        })
-        
-    }
+  try {
+    const { prompt } = req.body;
+    const result = await generateResult(prompt);
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Failed to generate content.",
+      error: error.message,
+    });
+  }
 }

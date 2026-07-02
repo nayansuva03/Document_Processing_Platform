@@ -1,4 +1,4 @@
-export async function generateContent() {
+export async function generateContent(prompt) {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/api/generate`, {
     method: "POST",
 
@@ -6,11 +6,11 @@ export async function generateContent() {
       "Content-Type": "application/json"
     },
 
-    body: JSON.stringify()
+    body: JSON.stringify({prompt})
   });
 
     if (!response.ok) {
-        throw new Error("Failed to generate MCQs");
+        throw new Error("Failed to generate content.");
     }
 
   return await response.json();
