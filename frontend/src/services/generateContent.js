@@ -1,4 +1,4 @@
-export async function generateMCQs(pdfText) {
+export async function generateContent() {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/api/generate`, {
     method: "POST",
 
@@ -6,7 +6,7 @@ export async function generateMCQs(pdfText) {
       "Content-Type": "application/json"
     },
 
-    body: JSON.stringify({ pdfText })
+    body: JSON.stringify()
   });
 
     if (!response.ok) {

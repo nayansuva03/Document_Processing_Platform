@@ -1,6 +1,7 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
-function MaxQuestOption({ onSelectType, onBack }) {
+function MaxQuestOption({ onSelectType }) {
   const options = [
     { id: "mcq", title: "Multiple Choice (MCQs)", icon: "🎯", desc: "Standard format options with a single right answer." },
     { id: "true_false", title: "True / False", icon: "⚖️", desc: "Quick conceptual assertion verification statements." },
@@ -10,12 +11,10 @@ function MaxQuestOption({ onSelectType, onBack }) {
 
   return (
     <div className="w-full max-w-4xl px-4 py-8 mx-auto animate-in fade-in duration-200">
-      <button 
-        onClick={onBack}
-        className="text-slate-500 hover:text-slate-800 font-semibold text-sm flex items-center gap-2 mb-6 transition-colors"
-      >
-        ← Back to Options
-      </button>
+      <NavLink to="/HomeOptions" className="text-slate-500 hover:text-slate-800 font-semibold text-sm flex items-center gap-2 mb-6 transition-colors">
+    ← Back to Options
+      </NavLink>
+      
 
       <div className="mb-8">
         <h2 className="text-2xl font-extrabold text-slate-800">Select Target Format</h2>

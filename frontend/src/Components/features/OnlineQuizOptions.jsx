@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
-function OnlineQuizOptions({ onStartQuiz, onBack }) {
+function OnlineQuizOptions({ onStartQuiz }) {
   const [quizType, setQuizType] = useState("mcq"); // Default selection
   const [numQuestions, setNumQuestions] = useState(10);
 
@@ -29,13 +30,11 @@ function OnlineQuizOptions({ onStartQuiz, onBack }) {
 
   return (
     <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-xl w-full max-w-md border border-slate-100 animate-in fade-in duration-200">
-      <button 
-        onClick={onBack}
-        className="text-slate-400 hover:text-slate-600 font-semibold text-xs flex items-center gap-1 mb-6 transition-colors"
-      >
-        ← Back
-      </button>
-
+      
+      <NavLink to="/HomeOptions" className="text-slate-400 hover:text-slate-600 font-semibold text-xs flex items-center gap-1 mb-6 transition-colors">
+ ← Back
+      </NavLink>
+      
       <div className="mb-6">
         <h2 className="text-xl font-extrabold text-slate-800">Quiz Configurations</h2>
         <p className="text-slate-500 text-xs mt-1">Set up your live sandbox assessment preferences.</p>

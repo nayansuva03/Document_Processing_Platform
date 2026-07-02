@@ -1,17 +1,14 @@
 import { useState } from "react";
-import Navbar from "./Components/Navbar";
-import Register from "./Components/Register";
-import PdfUploadPage from "./Components/PdfUploadPage";
-import Loading from "./Components/Loading";
-import Download from "./Components/Download";
-import About from "./Components/Aboutpage";
-import PreviousPDFs from "./Components/PreviousPDFs";
-import HomeOptions from "./Components/HomeOptions";
-import MaxQuestOption from "./Components/MaxQuestOption";
-import OnlineQuizOptions from "./Components/OnlineQuizOptions";
-import ExamPaperOptions from "./Components/ExamPaperOptions";
-import { extracteFromPdf } from "./utils/extractText";
-import { generateMCQs } from "./utils/generateMCQs";
+import Navbar from "./Components/common/Navbar";
+import Register from "./Components/common/Register";
+import PdfUploadPage from "./Components/upload/PdfUploadPage";
+import About from "./Components/pages/AboutPage";
+import PreviousPDFs from "./Components/features/PreviousPDFs";
+import HomeOptions from "./Components/home/HomeOptions";
+import MaxQuestOption from "./Components/features/MaxQuestOption";
+import OnlineQuizOptions from "./Components/features/OnlineQuizOptions";
+import ExamPaperOptions from "./Components/features/ExamPaperOptions";
+import { extracteFromPdf } from "./services/pdfExtractor";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUsableExtractedText } from "./Redux/pdfSlice";
@@ -46,8 +43,8 @@ function App() {
 
         }}
       />
-
-      <Routes>
+      <div className="flex justify-center items-center mt-10">
+<Routes>
         <Route path="/" element={<PdfUploadPage FinalFiles={handelFinalFiles} />} />
         <Route path="/PreviousPDFs" element={<PreviousPDFs isLoggedIn={isLoggedIn} />} />
         <Route path="/About" element={<About />} />
@@ -67,6 +64,9 @@ function App() {
           }}
         />
       )}
+      </div>
+
+      
 
     </>
   );

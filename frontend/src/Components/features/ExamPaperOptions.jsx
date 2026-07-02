@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
-function ExamPaperOptions({ onSubmitPaper, onBack }) {
+function ExamPaperOptions({ onSubmitPaper }) {
   // Centralized state holding all form configurations
   const [formData, setFormData] = useState({
     instituteName: "",
@@ -100,14 +101,9 @@ function ExamPaperOptions({ onSubmitPaper, onBack }) {
 
   return (
     <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-xl w-full max-w-2xl border border-slate-100 animate-in fade-in duration-200">
-      {/* Structural Heading Actions */}
-      <button 
-        type="button"
-        onClick={onBack}
-        className="text-slate-400 hover:text-slate-600 font-semibold text-xs flex items-center gap-1 mb-6 transition-colors"
-      >
-        ← Back
-      </button>
+ <NavLink to="/HomeOptions" className="text-slate-400 hover:text-slate-600 font-semibold text-xs flex items-center gap-1 mb-6 transition-colors">
+ ← Back
+      </NavLink>
 
       <div className="mb-8">
         <h2 className="text-2xl font-extrabold text-slate-800">Exam Paper Parameters</h2>
