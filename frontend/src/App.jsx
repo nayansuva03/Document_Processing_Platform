@@ -9,19 +9,17 @@ import PreviousPDFs from "./Components/PreviousPDFs";
 import HomeOptions from "./Components/HomeOptions";
 import MaxQuestOption from "./Components/MaxQuestOption";
 import OnlineQuizOptions from "./Components/OnlineQuizOptions";
+import ExamPaperOptions from "./Components/ExamPaperOptions";
 import { extracteFromPdf } from "./utils/extractText";
 import { generateMCQs } from "./utils/generateMCQs";
 import { Routes, Route } from "react-router-dom";
-import ExamPaperOptions from "./Components/ExamPaperOptions";
 import { useDispatch } from "react-redux";
-import { setExtractedText } from "./redux/pdfSlice";
-
+import { setUsableExtractedText } from "./Redux/pdfSlice";
 
 function App() {
-  const [Mcq, setMcq] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
 
   async function handelFinalFiles(listOfFiles) {
@@ -29,12 +27,8 @@ function App() {
     try {
       const ArrayOfText = await Promise.all(listOfFiles.map(f => extracteFromPdf(f)));
       const CombainedText = ArrayOfText.join('\n\n')
-      dispatch(setExtractedText(CombainedText))
-
-
-      const questions = await generateMCQs(CombainedText);
-      setMcq(questions);
-
+      dispatch(setUsableExtractedText(CombainedText))
+      
     } catch (error) {
       console.error("Error generating MCQs:", error);
       alert("An error occurred. Please try again.");
@@ -73,6 +67,7 @@ function App() {
           }}
         />
       )}
+
     </>
   );
 }

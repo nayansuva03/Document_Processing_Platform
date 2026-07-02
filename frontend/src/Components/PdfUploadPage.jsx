@@ -50,7 +50,6 @@ function PdfUploadPage({ FinalFiles }) {
             hover:file:bg-indigo-100 file:transition-colors cursor-pointer"
         />
       </div>
-
       <NavLink
 
         to="Homeoptions"
