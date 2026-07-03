@@ -8,6 +8,7 @@ import HomeOptions from "./Components/home/HomeOptions";
 import MaxQuestOption from "./Components/features/MaxQuestOption";
 import OnlineQuizOptions from "./Components/features/OnlineQuizOptions";
 import ExamPaperOptions from "./Components/features/ExamPaperOptions";
+import Download from "./Components/pages/Download";
 import { extracteFromPdf } from "./services/pdfExtractor";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -52,7 +53,7 @@ function App() {
         <Route path="/HomeOptions/maxquest" element={<MaxQuestOption />} />
         <Route path="/HomeOptions/onlinequez" element={<OnlineQuizOptions />} />
         <Route path="/HomeOptions/exampaper" element={<ExamPaperOptions />} />
-
+        <Route path="/download" element={<Download />} />
       </Routes>
 
       {showRegister && (

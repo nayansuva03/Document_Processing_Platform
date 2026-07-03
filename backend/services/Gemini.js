@@ -5,7 +5,7 @@ dotenv.config();
 
 const getAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
-export async function generateResult(prompt) {
+export async function generateLLMResult(prompt) {
 
 const model = getAi.getGenerativeModel({model : 'gemini-2.5-flash'})
 
