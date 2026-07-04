@@ -1,0 +1,161 @@
+import React, { useState, useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import QuizResult from "./QuizResult"; // We will create this next
+
+function OnlineQuiz() {
+    const navigate = useNavigate();
+    // Assuming 'generatedContent' stores the raw response from Gemini
+    const rawContent = useSelector((state) => state.pdf.generatedContent);
+
+    const [quizData, setQuizData] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [userAnswers, setUserAnswers] = useState({});
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [error, setError] = useState(null);
+
+    // Parse the AI response into a usable JSON object
+    useEffect(() => {
+        if (!rawContent) {
+            setError("No quiz data found. Please generate a quiz first.");
+            return;
+        }
+
+        try {
+            // Strip markdown code blocks if Gemini returns them
+            let cleanedContent = rawContent.replace(/```json/gi, "").replace(/```/g, "").trim();
+            const parsed = JSON.parse(cleanedContent);
+
+            // Ensure it's an array
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                setQuizData(parsed);
+            } else if (parsed.questions && Array.isArray(parsed.questions)) {
+                setQuizData(parsed.questions);
+            } else {
+                throw new Error("Invalid format");
+            }
+        } catch (err) {
+            console.error("JSON Parsing Error:", err);
+            setError("Failed to parse the quiz data. The AI returned an unexpected format.");
+        }
+    }, [rawContent]);
+
+    const handleOptionSelect = (option) => {
+        setUserAnswers((prev) => ({
+            ...prev,
+            [currentIndex]: option,
+        }));
+    };
+
+    const handleNext = () => {
+        if (currentIndex < quizData.length - 1) {
+            setCurrentIndex((prev) => prev + 1);
+        }
+    };
+
+    const handlePrev = () => {
+        if (currentIndex > 0) {
+            setCurrentIndex((prev) => prev - 1);
+        }
+    };
+
+    const handleSubmit = () => {
+        // Optional: Check if all questions are answered
+        if (Object.keys(userAnswers).length < quizData.length) {
+            const confirmSubmit = window.confirm("You have unanswered questions. Submit anyway?");
+            if (!confirmSubmit) return;
+        }
+        setIsSubmitted(true);
+    };
+
+    if (error) {
+        return (
+            <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md text-center">
+                <p className="text-red-500 font-bold mb-4">{error}</p>
+                <button
+                    onClick={() => navigate("/OnlineQuizOptions")}
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-xl"
+                >
+                    Go Back
+                </button>
+            </div>
+        );
+    }
+
+    if (quizData.length === 0) {
+        return <div className="text-slate-600 font-bold p-8">Loading quiz...</div>;
+    }
+
+    // If submitted, show the results component
+    if (isSubmitted) {
+        return <QuizResult questions={quizData} userAnswers={userAnswers} onRestart={() => navigate("/OnlineQuizOptions")} />;
+    }
+
+    const currentQuestion = quizData[currentIndex];
+    // If the AI forgot to provide options (e.g., for True/False), supply defaults
+    const options = currentQuestion.options || ["True", "False"];
+    const selectedAnswer = userAnswers[currentIndex];
+
+    return (
+        <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-xl w-full max-w-2xl border border-slate-100 animate-in fade-in duration-200">
+            <div className="flex justify-between items-center mb-6">
+                <span className="text-sm font-bold text-slate-400">
+                    Question {currentIndex + 1} of {quizData.length}
+                </span>
+                <span className="px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-bold rounded-full">
+                    Live Sandbox
+                </span>
+            </div>
+
+            <h2 className="text-xl font-extrabold text-slate-800 mb-6">
+                {currentQuestion.question}
+            </h2>
+
+            <div className="space-y-3 mb-8">
+                {options.map((option, idx) => {
+                    const isSelected = selectedAnswer === option;
+                    return (
+                        <button
+                            key={idx}
+                            onClick={() => handleOptionSelect(option)}
+                            className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ${isSelected
+                                    ? "border-indigo-600 bg-indigo-50 font-bold text-indigo-700"
+                                    : "border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300"
+                                }`}
+                        >
+                            {option}
+                        </button>
+                    );
+                })}
+            </div>
+
+            <div className="flex justify-between items-center mt-8">
+                <button
+                    onClick={handlePrev}
+                    disabled={currentIndex === 0}
+                    className="px-6 py-3 font-semibold text-slate-500 hover:text-slate-700 disabled:opacity-30 transition-colors"
+                >
+                    Previous
+                </button>
+
+                {currentIndex === quizData.length - 1 ? (
+                    <button
+                        onClick={handleSubmit}
+                        className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-all"
+                    >
+                        Submit Quiz
+                    </button>
+                ) : (
+                    <button
+                        onClick={handleNext}
+                        className="px-8 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition-all"
+                    >
+                        Next
+                    </button>
+                )}
+            </div>
+        </div>
+    );
+}
+
+export default OnlineQuiz;

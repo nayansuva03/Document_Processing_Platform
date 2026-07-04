@@ -13,7 +13,6 @@ export async function generateContent(prompt) {
     if (!response.ok) {
         throw new Error("Failed to generate content.");
     }
-alert("we got an responce!")
 
   return await response.json();
 }

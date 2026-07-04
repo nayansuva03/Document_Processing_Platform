@@ -1,14 +1,16 @@
 import { useState } from "react";
 import Navbar from "./Components/common/Navbar";
-import Register from "./Components/common/Register";
-import PdfUploadPage from "./Components/upload/PdfUploadPage";
-import About from "./Components/pages/AboutPage";
-import PreviousPDFs from "./Components/features/PreviousPDFs";
+import Register from "./Components/pages/Register";
+import PdfUploadPage from "./PdfUploadPage";
+import About from "./Components/home/AboutPage";
+import PreviousPDFs from "./Components/home/PreviousPDFs";
 import HomeOptions from "./Components/home/HomeOptions";
 import MaxQuestOption from "./Components/features/MaxQuestOption";
 import OnlineQuizOptions from "./Components/features/OnlineQuizOptions";
 import ExamPaperOptions from "./Components/features/ExamPaperOptions";
 import Download from "./Components/pages/Download";
+import QuizResult from "./Components/features/QuizResult";
+import OnlineQuiz from "./Components/features/OnlineQuiz";
 import { extracteFromPdf } from "./services/pdfExtractor";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -51,9 +53,12 @@ function App() {
         <Route path="/About" element={<About />} />
         <Route path="/Homeoptions" element={<HomeOptions />} />
         <Route path="/HomeOptions/maxquest" element={<MaxQuestOption />} />
-        <Route path="/HomeOptions/onlinequez" element={<OnlineQuizOptions />} />
+        <Route path="/HomeOptions/onlinequiz" element={<OnlineQuizOptions />} />
+          <Route path="/HomeOptions/onlinequiz/OnlineQuiz" element={<OnlineQuiz />} />
+          <Route path="/HomeOptions/onlinequiz/QuizResult" element={<QuizResult />} />
         <Route path="/HomeOptions/exampaper" element={<ExamPaperOptions />} />
         <Route path="/download" element={<Download />} />
+
       </Routes>
 
       {showRegister && (

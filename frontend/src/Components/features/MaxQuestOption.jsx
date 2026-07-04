@@ -1,7 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { generateContent } from '../../services/generateContent'
 import { setGeneratedContent, setLoading } from "../../Redux/pdfSlice";
 import Loading from "../pages/Loading";

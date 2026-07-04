@@ -24,7 +24,7 @@ function HomeOptions() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center pt-4">
 
         {/* Card 1: Online Quiz */}
-        <NavLink to="/HomeOptions/onlinequez">
+        <NavLink to="/HomeOptions/onlinequiz">
           <div
             className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 hover:border-indigo-200 hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-72 justify-between group"
           >
