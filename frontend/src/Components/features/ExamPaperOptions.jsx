@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { generateContent } from "../../services/generateContent";
 import { setGeneratedContent, setLoading } from "../../Redux/pdfSlice";
-import Loading from "../common/Loading";
+import Loading from "../pages/Loading";
 
 function ExamPaperOptions() {
 

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { generateContent } from '../../services/generateContent'
 import { setGeneratedContent, setLoading } from "../../Redux/pdfSlice";
-import Loading from "../common/Loading";
+import Loading from "../pages/Loading";
 
 function MaxQuestOption() {
   const dispatch = useDispatch();
