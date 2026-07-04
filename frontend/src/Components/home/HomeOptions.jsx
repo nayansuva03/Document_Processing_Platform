@@ -76,6 +76,9 @@ function HomeOptions() {
                 Structure systematic printable standard evaluation blueprints.
               </p>
             </div>
+            <span className="text-indigo-600 font-bold text-sm inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              Explore Formats →
+            </span>
           </div>
         </NavLink>
 
