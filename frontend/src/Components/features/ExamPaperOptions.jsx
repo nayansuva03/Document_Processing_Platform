@@ -1,8 +1,18 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { generateContent } from "../../services/generateContent";
+import { setGeneratedContent, setLoading } from "../../Redux/pdfSlice";
+import Loading from "../common/Loading";
 
-function ExamPaperOptions({ onSubmitPaper }) {
-  // Centralized state holding all form configurations
+function ExamPaperOptions() {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const Text = useSelector((state) => state.pdf.UsableExtractedText);
+  const isLoading = useSelector((state) => state.pdf.isLoading);
+
+
   const [formData, setFormData] = useState({
     instituteName: "",
     instituteLogo: null,
@@ -89,20 +99,99 @@ function ExamPaperOptions({ onSubmitPaper }) {
   }
 
   function handleSubmit(e) {
-    e.preventDefault();
-    
-    if (!formData.instituteName || !formData.subject || !formData.totalMarks) {
-      alert("Please fill in the core parameters (Institute Name, Subject, and Total Marks).");
-      return;
-    }
-    
-    onSubmitPaper(formData);
+  e.preventDefault();
+
+  if (
+    !formData.instituteName ||
+    !formData.subject ||
+    !formData.totalMarks
+  ) {
+    alert(
+      "Please fill Institute Name, Subject and Total Marks."
+    );
+    return;
   }
+
+  const hasQuestionType = Object.values(
+    formData.questionTypes
+  ).some((q) => q.checked);
+
+  if (!hasQuestionType) {
+    alert("Please select at least one question type.");
+    return;
+  }
+
+  handleFinalFunction();
+}
+
+async function handleFinalFunction() {
+  const prompt = `
+Create an exam paper using the text below.
+
+Institute Name: ${formData.instituteName}
+Course / Standard: ${formData.courseStandard}
+Subject: ${formData.subject}
+Time Duration: ${formData.timeDuration}
+Total Marks: ${formData.totalMarks}
+Difficulty: ${formData.difficulty}
+
+Question Types
+
+Include MCQs: ${formData.questionTypes.mcq.checked}
+Extra MCQs: ${formData.questionTypes.mcq.extra}
+
+Include True/False: ${formData.questionTypes.trueFalse.checked}
+Extra True/False: ${formData.questionTypes.trueFalse.extra}
+
+Include One Liner: ${formData.questionTypes.oneLiner.checked}
+Extra One Liner: ${formData.questionTypes.oneLiner.extra}
+
+Include Long Questions: ${formData.questionTypes.longQuestion.checked}
+Extra Long Questions: ${formData.questionTypes.longQuestion.extra}
+
+Generate an answer key at the end.
+
+Return ONLY valid JSON.
+Do NOT use markdown.
+Do NOT wrap the JSON inside \`\`\`json.
+
+Text:
+${Text}
+`;
+
+  try {
+    dispatch(setLoading(true));
+
+    console.log(prompt);
+
+    const result = await generateContent(prompt);
+
+    console.log(result);
+
+    dispatch(setGeneratedContent(result));
+
+    navigate("/download");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to generate exam paper.");
+  } finally {
+    dispatch(setLoading(false));
+  }
+}
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <Loading />
+      </div>
+    );
+  }
+
 
   return (
     <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-xl w-full max-w-2xl border border-slate-100 animate-in fade-in duration-200">
- <NavLink to="/HomeOptions" className="text-slate-400 hover:text-slate-600 font-semibold text-xs flex items-center gap-1 mb-6 transition-colors">
- ← Back
+      <NavLink to="/HomeOptions" className="text-slate-400 hover:text-slate-600 font-semibold text-xs flex items-center gap-1 mb-6 transition-colors">
+        ← Back
       </NavLink>
 
       <div className="mb-8">
@@ -111,7 +200,7 @@ function ExamPaperOptions({ onSubmitPaper }) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        
+
         {/* Core Identity Parameters Context Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
@@ -217,7 +306,7 @@ function ExamPaperOptions({ onSubmitPaper }) {
         <div>
           <label className="block text-slate-700 font-bold text-sm mb-3">Questions Structural Configuration Matrix</label>
           <div className="bg-slate-50 rounded-2xl border border-slate-200 divide-y divide-slate-200 overflow-hidden">
-            
+
             {[
               { id: "mcq", label: "MCQs" },
               { id: "trueFalse", label: "True / False" },
@@ -238,10 +327,9 @@ function ExamPaperOptions({ onSubmitPaper }) {
 
                 {/* MODIFIED: Replaced Sub-Checkbox with Number Input field (max 5) */}
                 <div className="flex items-center gap-2">
-                  <span 
-                    className={`text-xs font-medium transition-colors duration-150 ${
-                      formData.questionTypes[item.id].checked ? "text-slate-600" : "text-slate-300"
-                    }`}
+                  <span
+                    className={`text-xs font-medium transition-colors duration-150 ${formData.questionTypes[item.id].checked ? "text-slate-600" : "text-slate-300"
+                      }`}
                   >
                     Extra / Optional count:
                   </span>
