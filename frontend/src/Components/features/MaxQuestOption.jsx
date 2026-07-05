@@ -49,7 +49,7 @@ Text:
 ${Text}
 `;
     console.log(prompt);
-
+//-------------------------------------------------------------
     const result = await generateContent(prompt);
     console.log(result);
 

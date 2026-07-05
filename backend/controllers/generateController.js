@@ -3,7 +3,7 @@ console.log('generateController.js is working...');
 
 export async function generate(req, res) {
   console.log('inside generate function...');
-  
+
   try {
     const { prompt } = req.body;
     const result = await generateLLMResult(prompt);

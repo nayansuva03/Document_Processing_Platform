@@ -3,45 +3,57 @@ import jsPDF from "jspdf";
 
 function Download() {
   const generatedContent = useSelector(
+
     (state) => state.pdf.generatedContent
+
   );
+  const questions = generatedContent?.questions || [];
 
   function handleDownload() {
-    const doc = new jsPDF();
 
-    let y = 20;
+const doc = new jspdf();
 
-    doc.setFontSize(18);
-    doc.text("Generated Questions", 20, y);
+let y = 20;
 
-    y += 15;
+doc.setFontSize(18);
 
-    generatedContent.forEach((q, index) => {
-      // New page if needed
-      if (y > 260) {
-        doc.addPage();
-        y = 20;
-      }
+doc.text('Generated Questions', 20, y);
 
-      doc.setFontSize(13);
-      doc.text(`${index + 1}. ${q.question}`, 20, y);
+y += 15;
 
-      y += 8;
+doc.setFontSize(12);
 
-      q.options.forEach((option) => {
-        doc.setFontSize(11);
-        doc.text(option, 28, y);
-        y += 7;
-      });
+questions.forEach((q, index) => {
 
-      doc.setFontSize(11);
-      doc.text(`Answer: ${q.answer}`, 28, y);
+doc.text(`${index + 1}. ${q.question}`, 20, y);
 
-      y += 12;
-    });
+y += 8;
 
-    doc.save("questions.pdf");
-  }
+q.options?.forEach((opt) => {
+
+doc.text(`- ${opt}`, 25, y);
+
+y += 6;
+
+});
+
+doc.text(`Answer: ${q.answer}`, 25, y);
+
+y += 10;
+
+if (y > 270) {
+
+doc.addPage();
+
+y = 20;
+
+}
+
+});
+
+doc.save('questions.pdf');
+
+}
 
   return (
     <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md mx-auto text-center">
@@ -50,7 +62,7 @@ function Download() {
       </h1>
 
       <p className="mb-6">
-        Generated <b>{generatedContent.length}</b> questions.
+        Generated <b>{questions.length || 0}</b> questions.
       </p>
 
       <button

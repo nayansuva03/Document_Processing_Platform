@@ -7,7 +7,7 @@ const app = express();
 const PORT = 5000;
 
 app.use(cors({
-  //  origin: "https://mcqs-generator-ruby.vercel.app/"
+   // origin: "https://mcqs-generator-ruby.vercel.app/"
 }));
 
 app.use(express.json());
@@ -18,5 +18,5 @@ app.get("/",(req, res) => {
 })
 
 app.listen(PORT, () =>{
-    console.log("server is running")
+    console.log("server is running...")
 })
