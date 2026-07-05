@@ -41,10 +41,8 @@ function OnlineQuizOptions() {
   async function handleFinalFunction() {
     try {
       dispatch(setLoading(true));
-
-      // Strict Prompt Engineering for consistent JSON schema
       const prompt = `Create ${numQuestions} ${quizType === 'mcq' ? 'Multiple Choice' : 'True/False'} questions based on the text below.
-
+ 
 You MUST return ONLY a valid JSON array of objects. Do not include any markdown formatting like \`\`\`json. 
 Each object in the array must strictly adhere to the following schema:
 [
@@ -54,25 +52,24 @@ Each object in the array must strictly adhere to the following schema:
     "answer": "The exact text of the correct option"
   }
 ]
-
+ 
 Note for options: If it is a True/False quiz, provide exactly two options: ["True", "False"].
-
+ 
 Text:
 ${Text}
 `;
 
-      console.log("Sending prompt to Gemini:", prompt);
-
       const result = await generateContent(prompt);
       console.log("Raw Result from Gemini:", result);
 
-      dispatch(setGeneratedContent(result));
+      // Wrap in { questions: result } to match MaxQuestOption
+      dispatch(setGeneratedContent({ questions: result }));
       dispatch(setLoading(false));
       navigate("/HomeOptions/onlinequiz/OnlineQuiz");
     } catch (err) {
       dispatch(setLoading(false));
       console.error(err);
-      alert("Failed to generate questions.");
+      alert("Failed to generate questions. (from onlineQuizOptions.jsx)");
     }
   }
 

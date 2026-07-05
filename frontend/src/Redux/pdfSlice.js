@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   UsableExtractedText: "",
-  generatedContent: [],
+  generatedContent: { questions: [] }, // ← Object with questions property
   isLoading: false,
 };
 
@@ -14,13 +14,14 @@ const pdfslice = createSlice({
       state.UsableExtractedText = action.payload;
     },
     setGeneratedContent: (state, action) => {
-      state.generatedContent = action.payload;
+      state.generatedContent = action.payload; // Receives { questions: [...] }
     },
-     setLoading: (state, action) => {
-    state.isLoading = action.payload;
-  },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
-export const { setUsableExtractedText, setGeneratedContent, setLoading } = pdfslice.actions;
+export const { setUsableExtractedText, setGeneratedContent, setLoading } =
+  pdfslice.actions;
 export default pdfslice.reducer;

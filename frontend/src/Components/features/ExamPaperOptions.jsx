@@ -124,61 +124,74 @@ function ExamPaperOptions() {
   handleFinalFunction();
 }
 
-async function handleFinalFunction() {
-  const prompt = `
-Create an exam paper using the text below.
+  async function handleFinalFunction() {
+    const prompt = `
+You MUST return ONLY valid JSON. Do NOT include any markdown, code blocks, or extra text.
 
-Institute Name: ${formData.instituteName}
-Course / Standard: ${formData.courseStandard}
-Subject: ${formData.subject}
-Time Duration: ${formData.timeDuration}
-Total Marks: ${formData.totalMarks}
-Difficulty: ${formData.difficulty}
+Create an exam paper with the following configuration:
+- Institute Name: ${formData.instituteName}
+- Course / Standard: ${formData.courseStandard}
+- Subject: ${formData.subject}
+- Time Duration: ${formData.timeDuration}
+- Total Marks: ${formData.totalMarks}
+- Difficulty: ${formData.difficulty}
 
-Question Types
-
-Include MCQs: ${formData.questionTypes.mcq.checked}
-Extra MCQs: ${formData.questionTypes.mcq.extra}
-
-Include True/False: ${formData.questionTypes.trueFalse.checked}
-Extra True/False: ${formData.questionTypes.trueFalse.extra}
-
-Include One Liner: ${formData.questionTypes.oneLiner.checked}
-Extra One Liner: ${formData.questionTypes.oneLiner.extra}
-
-Include Long Questions: ${formData.questionTypes.longQuestion.checked}
-Extra Long Questions: ${formData.questionTypes.longQuestion.extra}
-
-Generate an answer key at the end.
-
-Return ONLY valid JSON.
-Do NOT use markdown.
-Do NOT wrap the JSON inside \`\`\`json.
-
-Text:
+Generate questions based on this text:
 ${Text}
-`;
 
-  try {
-    dispatch(setLoading(true));
-
-    console.log(prompt);
-
-    const result = await generateContent(prompt);
-
-    console.log(result);
-
-    dispatch(setGeneratedContent(result));
-
-    navigate("/download");
-  } catch (err) {
-    console.error(err);
-    alert("Failed to generate exam paper.");
-  } finally {
-    dispatch(setLoading(false));
-  }
+Return ONLY this JSON structure, nothing else:
+{
+  "exam_header": {
+    "institute_name": "${formData.instituteName}",
+    "course_standard": "${formData.courseStandard}",
+    "subject": "${formData.subject}",
+    "time_duration": "${formData.timeDuration}",
+    "total_marks": ${formData.totalMarks},
+    "difficulty": "${formData.difficulty}"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question_text": "Question text here",
+      "question_type": "mcq",
+      "marks": 1,
+      "options": ["A) Option 1", "B) Option 2", "C) Option 3", "D) Option 4"]
+    }
+  ],
+  "answer_key": [
+    {
+      "id": 1,
+      "answer": "B",
+      "explanation": "Explanation here"
+    }
+  ]
 }
 
+Important Rules:
+1. Include MCQs: ${formData.questionTypes.mcq.checked} (${formData.questionTypes.mcq.extra} extra)
+2. Include True/False: ${formData.questionTypes.trueFalse.checked} (${formData.questionTypes.trueFalse.extra} extra)
+3. Include One Liner: ${formData.questionTypes.oneLiner.checked} (${formData.questionTypes.oneLiner.extra} extra)
+4. Include Long Questions: ${formData.questionTypes.longQuestion.checked} (${formData.questionTypes.longQuestion.extra} extra)
+5. For each question type, set question_type field to: "mcq", "true_false", "one_liner", or "long_question"
+6. Return ONLY the JSON. No explanations, no markdown backticks.
+`;
+
+    try {
+      dispatch(setLoading(true));
+      console.log(prompt);
+
+      const result = await generateContent(prompt);
+      console.log("Result from Gemini:", result);
+
+      dispatch(setGeneratedContent({ questions: result }));
+      navigate("/examPaperDownload");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to generate exam paper.");
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">

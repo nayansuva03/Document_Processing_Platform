@@ -9,6 +9,7 @@ import MaxQuestOption from "./Components/features/MaxQuestOption";
 import OnlineQuizOptions from "./Components/features/OnlineQuizOptions";
 import ExamPaperOptions from "./Components/features/ExamPaperOptions";
 import Download from "./Components/pages/Download";
+import ExamPaperDownload from "./Components/pages/ExamPaperDownload";
 import QuizResult from "./Components/features/QuizResult";
 import OnlineQuiz from "./Components/features/OnlineQuiz";
 import { extracteFromPdf } from "./services/pdfExtractor";
@@ -58,6 +59,7 @@ function App() {
           <Route path="/HomeOptions/onlinequiz/QuizResult" element={<QuizResult />} />
         <Route path="/HomeOptions/exampaper" element={<ExamPaperOptions />} />
         <Route path="/download" element={<Download />} />
+          <Route path="/examPaperDownload" element={<ExamPaperDownload />} />
 
       </Routes>
 

@@ -14,23 +14,18 @@ function OnlineQuiz() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState(null);
 
-    // Parse the AI response into a usable JSON object
     useEffect(() => {
-        if (!rawContent) {
+        if (!rawContent || !rawContent.questions) {
             setError("No quiz data found. Please generate a quiz first.");
             return;
         }
 
         try {
-            // Strip markdown code blocks if Gemini returns them
-            let cleanedContent = rawContent.replace(/```json/gi, "").replace(/```/g, "").trim();
-            const parsed = JSON.parse(cleanedContent);
+            // rawContent is already { questions: [...] }
+            const parsed = rawContent.questions;
 
-            // Ensure it's an array
             if (Array.isArray(parsed) && parsed.length > 0) {
                 setQuizData(parsed);
-            } else if (parsed.questions && Array.isArray(parsed.questions)) {
-                setQuizData(parsed.questions);
             } else {
                 throw new Error("Invalid format");
             }
@@ -39,7 +34,6 @@ function OnlineQuiz() {
             setError("Failed to parse the quiz data. The AI returned an unexpected format.");
         }
     }, [rawContent]);
-
     const handleOptionSelect = (option) => {
         setUserAnswers((prev) => ({
             ...prev,

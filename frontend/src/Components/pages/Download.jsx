@@ -1,12 +1,8 @@
 import { useSelector } from "react-redux";
-import jsPDF from "jspdf";
+import jspdf from "jspdf";
 
 function Download() {
-  const generatedContent = useSelector(
-
-    (state) => state.pdf.generatedContent
-
-  );
+  const generatedContent = useSelector((s) => s.pdf.generatedContent);
   const questions = generatedContent?.questions || [];
 
   function handleDownload() {

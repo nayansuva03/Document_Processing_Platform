@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { generateContent } from '../../services/generateContent'
+import { generateContent } from '../../services/generateContent.js'
 import { setGeneratedContent, setLoading } from "../../Redux/pdfSlice";
 import Loading from "../pages/Loading";
 
@@ -41,9 +41,45 @@ function MaxQuestOption() {
     try{
       dispatch(setLoading(true));
 const prompt = `
-Create 10 ${questionType} questions from the text below.
+Create maximum ${questionType} questions from the text below.
 
-Return only valid JSON.
+if it's mcq then,
+Return ONLY a JSON array, no extra text, no markdown, no backticks, just raw JSON like this:
+[
+  {
+    "question": "What is ...?",
+    "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
+    "answer": "A"
+  }
+]
+
+if it's true/false then,
+Return ONLY a JSON array, no extra text, no markdown, no backticks, just raw JSON like this:
+[
+  {
+    "question": "What is ...?",
+    "options": ["True", "False"],
+    "answer": "True"
+  }
+]
+
+if it's one liner question then,
+Return ONLY a JSON array, no extra text, no markdown, no backticks, just raw JSON like this:
+[
+  {
+    "question": "What is ...?",
+    "answer": "It is ..."
+  }
+]
+
+if it's long question then,
+Return ONLY a JSON array, no extra text, no markdown, no backticks, just raw JSON like this:
+[
+  {
+    "question": "What is ...?",
+    "answer": "It is ..."
+  }
+]
 
 Text:
 ${Text}
@@ -52,15 +88,14 @@ ${Text}
 //-------------------------------------------------------------
     const result = await generateContent(prompt);
     console.log(result);
-
-    dispatch(setGeneratedContent(result));
-
+    
+      dispatch(setGeneratedContent({ questions: result}));
     dispatch(setLoading(false));
       navigate("/download");
     }catch(err){
       dispatch(setLoading(false));
       console.error(err);
-      alert("Failed to generate questions.");
+      alert("Failed to generate questions.(from MaxQuestOption.jsx)");
     }
     
   }
