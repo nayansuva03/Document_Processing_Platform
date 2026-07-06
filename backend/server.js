@@ -5,13 +5,13 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const PORT = 5000;
 const genAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 app.use(cors());
 app.use(express.json());
 
 app.post("/api/generate", (req, res) => {
+  console.log("/api/generate was called.");
   LLMFunction(req, res);
 });
 
@@ -19,29 +19,33 @@ app.get("/", (req, res) => {
   res.send("Backend running...");
 });
 
-app.listen(PORT, () => {
+app.listen(5000, () => {
   console.log("server is running...");
 });
 
 async function LLMFunction(req, res) {
   console.log("LLMFunction was called");
   try {
-    const { prompt } = req.body;
+    const prompt = req.body.prompt;
     const response = await genAi.models.generateContent({
       model: "gemini-3.5-flash",
       contents: prompt,
     });
     console.log("got a response");
-    console.log(response.text);
+    console.log("response.text : " + response.text);
 
-    // Parse the JSON string from Gemini into an actual array
     const parsedContent = JSON.parse(response.text);
+    //again uper thi aavta bhangbhosda ne redable banave
 
-    res.json({ questions: parsedContent }); // ← Return { questions: [...] }
+    res.status(200).json(parsedContent);
+    //"res.json()"(function from express js not just .json();) converts the js object into plain text to it can pass it.
+    //leter in frontend normal .json() function will convert it back to js object.
+    //number khali raikha se mane maja aave etle remove karso fer ny pade.
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: "Failed to generate content.",
+      //aa number important se error mate etle aane na kadhta.
+      message: "Failed to generate content(From server.js).",
       error: error.message,
     });
   }

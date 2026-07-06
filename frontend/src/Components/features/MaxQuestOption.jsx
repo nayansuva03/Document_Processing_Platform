@@ -38,9 +38,9 @@ function MaxQuestOption() {
   ];
 
   async function handleSelect(questionType) {
-    try{
+    try {
       dispatch(setLoading(true));
-const prompt = `
+      const prompt = `
 Create maximum ${questionType} questions from the text below.
 
 if it's mcq then,
@@ -84,20 +84,20 @@ Return ONLY a JSON array, no extra text, no markdown, no backticks, just raw JSO
 Text:
 ${Text}
 `;
-    console.log(prompt);
-//-------------------------------------------------------------
-    const result = await generateContent(prompt);
-    console.log(result);
-    
-      dispatch(setGeneratedContent({ questions: result}));
-    dispatch(setLoading(false));
+      console.log(prompt);
+      //-------------------------------------------------------------
+      const result = await generateContent(prompt);
+      console.log('from maxQuestOptions.jsx' + JSON.stringify(result));
+
+      dispatch(setGeneratedContent({ questions: result }));
+      dispatch(setLoading(false));
       navigate("/download");
-    }catch(err){
+    } catch (err) {
       dispatch(setLoading(false));
       console.error(err);
       alert("Failed to generate questions.(from MaxQuestOption.jsx)");
     }
-    
+
   }
 
   if (isLoading) {

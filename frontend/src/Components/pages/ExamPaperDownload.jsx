@@ -8,7 +8,7 @@ function ExamPaperDownload() {
     // generatedContent.questions is the entire response object from Gemini
     const examData = generatedContent?.questions || {};
     const examHeader = examData.exam_header || {};
-    const questionsList = examData.questions || [];
+    const questionsList = generatedContent?.questions || [];;
 
     function handleDownload() {
         const doc = new jsPDF();
