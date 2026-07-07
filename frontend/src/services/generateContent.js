@@ -2,14 +2,17 @@ export async function generateContent(prompt) {
   console.log(`From generateContant : ${prompt}`);
 
   
-  const response = await fetch(`http://localhost:5000/api/generate`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/api/generate`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt: prompt }),
+      //body is like this becouse server likes to resive a json formate file.
     },
-    body: JSON.stringify({ prompt: prompt }),
-    //body is like this becouse server likes to resive a json formate file.
-  });
+  );
 
   if (!response.ok) {
     throw new Error(
