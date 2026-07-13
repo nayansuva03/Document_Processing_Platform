@@ -1,4 +1,6 @@
 import express from "express";
+import mongoose from "mongoose";
+import User from "./mongoose.js";
 import cors from "cors";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
@@ -10,6 +12,29 @@ const genAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 app.use(cors());
 app.use(express.json());
 
+mongoose
+  .connect(process.env.MONGODB_URL)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+
+//--for mongodb
+app.post("/api/users", async (req, res) => {
+  console.log("/api/users was called.");
+  try {
+    const {username, password} = req.body;
+    const newUser = new User({username, password})
+    const saved = await newUser.save();
+
+    res.status(200).json({success:true, data:saved});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({success: false, error: err.message});
+  }
+})
+
+
+  //--for gemini
 app.post("/api/generate", (req, res) => {
   console.log("/api/generate was called.");
   LLMFunction(req, res);
@@ -22,7 +47,7 @@ app.get("/", (req, res) => {
 app.listen(5000, () => {
   console.log("server is running...");
 });
-
+//----------------------------------------------------------------------------------------------------------------------------
 async function LLMFunction(req, res) {
   console.log("LLMFunction was called");
   try {
@@ -50,3 +75,4 @@ async function LLMFunction(req, res) {
     });
   }
 }
+//------------------------------------------------------------------------------------------------------------------------------------------------------------

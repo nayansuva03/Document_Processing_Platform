@@ -17,7 +17,7 @@ function Navbar({ isLoggedIn, onLogin, onLogout }) {
 
 <NavLink to="/" className="flex-shrink-0 flex items-center gap-2 cursor-pointer">
    <span className="font-extrabold text-slate-800 text-xl tracking-tight">
-              Doc <span className="text-indigo-600">Pro    </span>
+              Paper<span className="text-indigo-600">Craft📦</span>
             </span>
 </NavLink>
 

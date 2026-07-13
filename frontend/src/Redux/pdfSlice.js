@@ -14,7 +14,7 @@ const pdfslice = createSlice({
       state.UsableExtractedText = action.payload;
     },
     setGeneratedContent: (state, action) => {
-      state.generatedContent = action.payload; // Receives { questions: [...] }
+      state.generatedContent = action.payload;
     },
     setLoading: (state, action) => {
       state.isLoading = action.payload;
