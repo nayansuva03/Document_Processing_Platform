@@ -53,7 +53,7 @@ async function LLMFunction(req, res) {
   try {
     const prompt = req.body.prompt;
     const response = await genAi.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-2.5-flash",
       contents: prompt,
     });
     console.log("got a response");

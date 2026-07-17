@@ -1,16 +1,40 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setusername } from '../../Redux/userSlice'; 
 
 function Register({ onClose, onLoginSuccess }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (username.trim() && password.trim()) {
-      onLoginSuccess();
-    } else {
+    if (!username.trim() || !password.trim()){
       alert("Please enter both username and password");
+      return;
     }
+      try{
+        const responce = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users`,{
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({username,password}),
+        })
+
+        const data = await responce.json();
+        if (data.success) {
+          console.log("User created:", data.data);
+          dispatch(setusername(username));
+          onLoginSuccess();
+          onClose();  
+        } else {
+          alert("Registration failed: " + data.error);
+        }
+      }catch(err){
+        console.error(err)
+      }
+    
   };
 
   return (
