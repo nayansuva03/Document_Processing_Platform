@@ -15,7 +15,6 @@ function ExamPaperOptions() {
 
   const [formData, setFormData] = useState({
     instituteName: "",
-    instituteLogo: null,
     bgImage: null,
     courseStandard: "",
     subject: "",
@@ -124,6 +123,15 @@ function ExamPaperOptions() {
   handleFinalFunction();
 }
 
+  function fileToBase64(file){
+    return new Promise((resolve, reject)=>{
+      const reader = new FileReader();
+      reader.onload =() => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    })
+  }
+
   async function handleFinalFunction() {
     const prompt = `
 You MUST return ONLY valid JSON. Do NOT include any markdown, code blocks, or extra text.
@@ -180,10 +188,26 @@ Important Rules:
       dispatch(setLoading(true));
       console.log(prompt);
 
+      // Convert background image to Base64 if provided
+      let backgroundImageBase64 = null;
+      if (formData.bgImage) {
+        try {
+          backgroundImageBase64 = await fileToBase64(formData.bgImage);
+          console.log("Background image converted to Base64");
+        } catch (error) {
+          console.warn("Could not convert background image:", error);
+        }
+      }
+
       const result = await generateContent(prompt);
       console.log("Result from Gemini:", result);
 
-      dispatch(setGeneratedContent({ questions: result }));
+      // Add background image to the result
+      dispatch(setGeneratedContent({
+        questions: result,
+        backgroundImage: backgroundImageBase64
+      }));
+
       navigate("/examPaperDownload");
     } catch (err) {
       console.error(err);
@@ -225,17 +249,6 @@ Important Rules:
               onChange={handleInputChange}
               placeholder="e.g. Stanford University or ABC High School"
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 text-sm font-medium transition-shadow"
-            />
-          </div>
-
-          <div>
-            <label className="block text-slate-700 font-bold text-sm mb-1.5">Institute Logo</label>
-            <input
-              type="file"
-              name="instituteLogo"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 cursor-pointer border border-slate-200 p-1 rounded-xl"
             />
           </div>
 
